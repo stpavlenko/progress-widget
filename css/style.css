@@ -1,0 +1,33 @@
+@property --progress-value {
+    syntax: "<percentage>";
+    initial-value: 0%;
+    inherits: false;
+}
+
+@keyframes progress {
+    to {
+        --progress-value: 100%;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.progress--hidden {
+    display: none;
+}
+
+.progress__ring {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.progress__ring--animated {
+    background: radial-gradient(closest-side, white 80%, transparent 80%),
+    conic-gradient(blue var(--progress-value), #dbedf6 0);
+    animation: progress 2s ease infinite;
+}
