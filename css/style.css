@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
 @property --progress-value {
     syntax: "<percentage>";
     initial-value: 0%;
@@ -10,24 +12,127 @@
     }
 }
 
+:root {
+    --bg-primary: #2196F3;
+    --bg-secondary: #ccc;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+.progress {
+    font-family: Nunito, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    max-width: 320px;
+    min-height: 568px;
+    /*border: 1px solid pink;*/
+}
+
+.progress form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.progress label {
+    display: flex;
+    gap: 1rem;
+}
+
+.progress input {
+    border-style: solid;
+    text-align: center;
+    border-color: var(--bg-secondary);
+}
+
+.progress input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.progress input, .progress__switch, .progress__slider {
+    transition: .4s;
+    width: 2.5rem;
+    height: 1.5rem;
+    border-radius: 1rem;
+}
+
+.progress__switch {
+    position: relative;
+}
+
+.progress__switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.progress__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--bg-secondary);
+}
+
+.progress__slider:before {
+    position: absolute;
+    content: "";
+    height: 1.2rem;
+    width: 1.2rem;
+    border-radius: 1rem;
+    background-color: white;
+    top: 0;
+    bottom: 0;
+    left: 0.2rem;
+    margin-block: auto;
+}
+
+input:checked + .progress__slider {
+    background-color: var(--bg-primary);
+}
+
+input:focus + .progress__slider, .progress input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--bg-primary);
+}
+
+input:checked + .progress__slider:before {
+    left: auto;
+    right: 0.2rem;
+}
+
+
 .progress--hidden {
     display: none;
 }
 
 .progress__ring {
-    width: 200px;
-    height: 200px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
 }
 
 .progress__ring--animated {
     background: radial-gradient(closest-side, white 80%, transparent 80%),
-    conic-gradient(blue var(--progress-value), #dbedf6 0);
+    conic-gradient(var(--bg-primary) var(--progress-value), var(--bg-secondary) 0);
     animation: progress 2s ease infinite;
+}
+
+@media screen and (orientation: landscape) {
+    .progress {
+        flex-direction: row;
+        max-width: 568px;
+        min-height: 320px;
+    }
 }
