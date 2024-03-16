@@ -125,5 +125,3 @@ window.widget = new ProgressWidget('progress-widget',
         state: 'normal',
         value: 62
     })
-
-widget.setValue(50)

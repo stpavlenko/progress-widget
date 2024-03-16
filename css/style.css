@@ -98,20 +98,24 @@ input::-webkit-inner-spin-button {
     margin-block: auto;
 }
 
-input:checked + .progress__slider {
+.progress input:checked + .progress__slider {
     background-color: var(--bg-primary);
 }
 
-input:focus + .progress__slider, .progress input:focus {
+.progress input:focus + .progress__slider, .progress input:focus {
     outline: none;
     box-shadow: 0 0 0 2px var(--bg-primary);
 }
 
-input:checked + .progress__slider:before {
+.progress input:checked + .progress__slider:before {
     left: auto;
     right: 0.2rem;
 }
 
+.progress input:disabled + .progress__slider, .progress input:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
 
 .progress--hidden {
     display: none;

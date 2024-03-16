@@ -1,5 +1,7 @@
 # Progress widget
 
+https://stpavlenko.github.io/progress-widget/
+
 Widget for display progress
 
 ## Example of use
@@ -29,4 +31,3 @@ Value in the range of 100
 
 `widget.setState()` - set state of widget  
 `widget.setValue()` - set value of widget
-
