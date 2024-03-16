@@ -27,6 +27,6 @@ Value in the range of 100
 
 ## API
 
-`widget.setState()` - set state of widget
+`widget.setState()` - set state of widget  
 `widget.setValue()` - set value of widget
 
