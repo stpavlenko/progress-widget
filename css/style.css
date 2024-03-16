@@ -47,9 +47,8 @@
 }
 
 .progress input {
-    border-style: solid;
     text-align: center;
-    border-color: var(--bg-secondary);
+    border: 1px solid var(--bg-secondary);
 }
 
 .progress input::-webkit-outer-spin-button,
