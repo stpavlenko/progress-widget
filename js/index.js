@@ -132,6 +132,6 @@ export class ProgressWidget {
 
 window.widget = new ProgressWidget('progress-widget',
     {
-        state: 'animated',
-        value: 10
+        state: 'normal',
+        value: 45
     })
