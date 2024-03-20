@@ -1,7 +1,7 @@
 export function createValueElements() {
     const label = document.createElement('label')
 
-    const span = createSpan('Value')
+    const span = createSpan({text: 'Value'})
 
     const input = document.createElement("input")
     input.type = 'number'
@@ -17,13 +17,9 @@ export function createValueElements() {
 export function createToggleElements(text) {
     const label = document.createElement('label')
 
-    const span = createSpan(text)
-
-    const toggle = document.createElement('span')
-    toggle.classList.add('progress__switch')
-
-    const slider = document.createElement('span')
-    slider.classList.add('progress__slider')
+    const toggleDescription = createSpan({text})
+    const toggle = createSpan({classname: 'progress__switch'})
+    const slider = createSpan({classname: 'progress__slider'})
 
     const input = document.createElement('input')
     input.type = 'checkbox'
@@ -32,13 +28,14 @@ export function createToggleElements(text) {
     toggle.appendChild(slider)
 
     label.append(toggle)
-    label.append(span)
+    label.append(toggleDescription)
 
     return {label, input}
 }
 
-function createSpan(text) {
+function createSpan({text, classname}) {
     const span = document.createElement('span')
-    span.textContent = text
+    if (text) span.textContent = text
+    if (classname) span.classList.add(classname)
     return span
 }

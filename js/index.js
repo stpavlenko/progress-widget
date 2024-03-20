@@ -1,12 +1,12 @@
-import {createToggleElements, createValueElements} from "./utils/inputs.js";
-import {createRoot} from "./utils/elements.js";
-import {isStateValid, isValueValid, toValidValue} from "./utils/validation.js";
+import {createToggleElements, createValueElements} from "./utils/createInputs.js";
+import {createProgressWidget} from "./utils/createProgressWidget.js";
+import {clampValue, isStateValid, isValueValid, toValidValue} from "./utils/validation.js";
 
 export class ProgressWidget {
     #state
     #value
     #ring
-    #root
+    #progressWidget
     #valueInput
     #animationToggle
     #hideToggle
@@ -15,9 +15,9 @@ export class ProgressWidget {
         if (!isStateValid(state)) throw new Error('state is not valid')
         if (!isValueValid(value)) throw new Error('value is not valid')
 
-        this.#root = createRoot()
-        const container = document.getElementById(id)
-        container.appendChild(this.#root)
+        this.#progressWidget = createProgressWidget()
+        const widgetContainer = document.getElementById(id)
+        widgetContainer.appendChild(this.#progressWidget)
         this.#render()
         this.setValue(value)
         this.setState(state)
@@ -26,7 +26,7 @@ export class ProgressWidget {
     #render() {
         this.#ring = document.createElement('div')
         this.#ring.classList.add('progress__ring')
-        this.#root.appendChild(this.#ring)
+        this.#progressWidget.appendChild(this.#ring)
 
         const form = document.createElement('form')
 
@@ -42,30 +42,20 @@ export class ProgressWidget {
         this.#hideToggle = hideElements.input
         form.appendChild(hideElements.label)
 
-        this.#root.appendChild(form)
+        this.#progressWidget.appendChild(form)
         this.#addListeners()
     }
 
     setState = (state) => {
         switch (state) {
             case 'normal':
-                this.#resetStateChanges()
-                this.#update()
+                this.#setNormalState()
                 break
             case 'animated':
-                this.#resetStateChanges()
-                this.#ring.classList.add('progress__ring--animated')
-                this.#ring.style.background = ''
-                this.#valueInput.disabled = true
-                this.#animationToggle.checked = true
-                this.#hideToggle.disabled = true
+                this.#setAnimatedState()
                 break
             case 'hidden':
-                this.#resetStateChanges()
-                this.#ring.style.display = 'none'
-                this.#valueInput.disabled = true
-                this.#animationToggle.disabled = true
-                this.#hideToggle.checked = true
+                this.#setHiddenState()
                 break
             default:
                 throw new Error('Unknown state')
@@ -93,16 +83,38 @@ export class ProgressWidget {
         this.#hideToggle.checked = false
     }
 
+    #setNormalState = () => {
+        this.#resetStateChanges()
+        this.#update()
+    }
+
+    #setAnimatedState = () => {
+        this.#resetStateChanges()
+        this.#update(clampValue(this.#value))
+        this.#ring.classList.add('progress__ring--animated')
+        this.#valueInput.disabled = true
+        this.#hideToggle.disabled = true
+        this.#animationToggle.checked = true
+    }
+
+    #setHiddenState = () => {
+        this.#resetStateChanges()
+        this.#ring.style.display = 'none'
+        this.#valueInput.disabled = true
+        this.#animationToggle.disabled = true
+        this.#hideToggle.checked = true
+    }
+
     #addListeners() {
         this.#valueInput.addEventListener('input', this.#handleInput)
         this.#animationToggle.addEventListener('change', this.#handleAnimationToggle)
         this.#hideToggle.addEventListener('change', this.#handleHideToggle)
     }
 
-    #update = () => {
+    #update = (value = this.#value) => {
         this.#ring.style.background = `
             radial-gradient(closest-side, white 80%, transparent 80%), 
-            conic-gradient(#2196F3 ${this.#value || 0}%, #ccc 0)
+            conic-gradient(#2196F3 ${value || 0}%, #ccc 0)
         `
     }
     #handleInput = (e) => {
@@ -110,18 +122,16 @@ export class ProgressWidget {
     }
 
     #handleAnimationToggle = (e) => {
-        if (e.target.checked) this.setState('animated')
-        else this.setState('normal')
+        this.setState(e.target.checked ? 'animated' : 'normal');
     }
 
     #handleHideToggle = e => {
-        if (e.target.checked) this.setState('hidden')
-        else this.setState('normal')
+        this.setState(e.target.checked ? 'hidden' : 'normal');
     }
 }
 
 window.widget = new ProgressWidget('progress-widget',
     {
-        state: 'normal',
-        value: 62
+        state: 'animated',
+        value: 10
     })
